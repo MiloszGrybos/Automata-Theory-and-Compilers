@@ -25,8 +25,12 @@ def fa(text: str, pattern: str) -> list[int]:
     if m == 0 or n < m:
         return []
 
-    alphabet = set(text).union(set(pattern))
-    delta = transition_fun(pattern, alphabet)
+    pattern_chars = set(pattern)
+    
+    if not pattern_chars.issubset(set(text)):
+        return []
+
+    delta = transition_fun(pattern, pattern_chars)
 
     matches = []
     q = 0
@@ -34,8 +38,7 @@ def fa(text: str, pattern: str) -> list[int]:
     for i in range(n):
         q = delta[q].get(text[i], 0)
         if q == m:
-            shift = i - m + 1
-            matches.append(shift)
+            matches.append(i - m + 1)
 
     return matches
 
